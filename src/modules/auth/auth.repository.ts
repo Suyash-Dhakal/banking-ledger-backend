@@ -1,7 +1,7 @@
-import prisma from "../../lib/prisma";
-import { RegisterUserInput } from "./auth.types";
+import prisma from "../../lib/prisma.js";
+import { RegisterUserInput } from "./auth.types.js";
 
-export async function createUser(input: RegisterUserInput) {
+export function createUser(input: RegisterUserInput) {
     return prisma.user.create({
         data: input,
         select: {
@@ -13,7 +13,7 @@ export async function createUser(input: RegisterUserInput) {
     })
 }
 
-export async function findUserByEmail(email: string) {
+export function findUserByEmail(email: string) {
     return prisma.user.findUnique({
         where: { email },
         select: {
@@ -25,3 +25,4 @@ export async function findUserByEmail(email: string) {
         }
     })
 }
+
