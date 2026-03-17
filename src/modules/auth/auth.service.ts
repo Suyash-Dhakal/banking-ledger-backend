@@ -3,6 +3,7 @@ import { createUser, findUserByEmail } from "./auth.repository.js";
 import { RegisterUserInput, LoginUserInput } from "./auth.types.js";
 import { hashPassword, comparePassword } from "../../shared/utils/hash.js";
 import jwt from "jsonwebtoken";
+import { sendRegistrationEmail } from "../../shared/utils/email.js";
 
 export async function registerUser(input: RegisterUserInput) {
     const existingUser = await findUserByEmail(input.email);
@@ -17,6 +18,11 @@ export async function registerUser(input: RegisterUserInput) {
         password: hashedPassword
     })
     const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET!, { expiresIn: "3d" });
+
+    // fire and forget email sending
+    sendRegistrationEmail(user.email, user.name).catch(err => {
+        console.error("Failed to send registration email:", err);
+    });
 
     return { user, token };
 }

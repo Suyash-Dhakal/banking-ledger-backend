@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma.js";
-import { RegisterUserInput } from "./auth.types.js";
+import { RegisterUserInput, SafeUser } from "./auth.types.js";
 
-export function createUser(input: RegisterUserInput) {
+export function createUser(input: RegisterUserInput): Promise<SafeUser> {
     return prisma.user.create({
         data: input,
         select: {
